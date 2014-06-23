@@ -691,12 +691,12 @@ void Transaction::sort(void)
 }
 
 
-BOOLEAN Transaction::add_item(LINT itm)
+bool Transaction::add_item(LINT itm)
 { 
   LINT i;
 
   for (i = 0; i < nitems; i++)
-    if ( items[i] == itm ) return FALSE;
+    if ( items[i] == itm ) return false;
 
   if (nitems >= maxsize) {	// allocate more memory
     LINT *old_items = items;
@@ -708,14 +708,14 @@ BOOLEAN Transaction::add_item(LINT itm)
   }
 
   items[nitems++] = itm;
-  return TRUE;
+  return true;
 }
 
 
 // adds pattern to transaction
-// returns TRUE if pattern was added, FALSE else
+// returns true if pattern was added, false else
 //
-BOOLEAN Transaction::add(String &pat, BOOLEAN corrupt)
+bool Transaction::add(String &pat, bool corrupt)
 {
   static UniformDist ud;
   LINT i, patlen;
@@ -730,7 +730,7 @@ BOOLEAN Transaction::add(String &pat, BOOLEAN corrupt)
   // in half of the cases, we drop the pattern that won't fit
   if ( patlen+nitems > tlen )	// not enough space left
     if ( ud() > 0.5 )
-      return FALSE;
+      return false;
   
   // pick "patlen" items at random from pattern
 //  if ( patlen < pat.size() )
@@ -741,7 +741,7 @@ BOOLEAN Transaction::add(String &pat, BOOLEAN corrupt)
 //  for (i = 0; i < patlen; i++)
 //    add_item( pat.rand_item(i) ); // allocates extra space if necessary
   
-  return TRUE;
+  return true;
 }
 
 
@@ -803,21 +803,21 @@ CustSeq::~CustSeq()
 
 
 // adds pattern to CustSeq
-// returns TRUE if pattern was added, FALSE else
+// returns true if pattern was added, false else
 // REWORK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //
-BOOLEAN CustSeq::add(String &pat, StringSet &lits)
+bool CustSeq::add(String &pat, StringSet &lits)
 {
   static UniformDist ud;
   LINT i, patlen;
   LINT pos;
   LINT newitems, olditems;
-  BOOLEAN corrupt;	// if TRUE, corrupt transactions too
+  bool corrupt;	// if true, corrupt transactions too
 
   if ( ud() > pat.conf_lvl() )
-    corrupt = TRUE;		// corrupt transactions
+    corrupt = true;		// corrupt transactions
   else
-    corrupt = FALSE;		// don't corrupt transactions
+    corrupt = false;		// don't corrupt transactions
 
   // corrupt the pattern by reducing its length;
   // conf_lvl for a pattern is decided at the time of pattern creation
@@ -826,7 +826,7 @@ BOOLEAN CustSeq::add(String &pat, StringSet &lits)
     while ( patlen > 0 && ud() > pat.conf_lvl() )
       patlen--;
   if ( patlen == 0 )	// no trans. left in sequence
-    return TRUE;
+    return true;
 
   // allows transactions to be dropped randomly from the sequence
 //  if ( patlen < pat.size() )
@@ -841,7 +841,7 @@ BOOLEAN CustSeq::add(String &pat, StringSet &lits)
   // in half of the cases, we drop the pattern that won't fit
   if ( (patlen > slen) || (newitems + nitems > slen * tlen) )
     if ( ud() > 0.5 )
-      return FALSE;
+      return false;
 
   if ( patlen > maxsize ) {	// need to allocate more memory
     TransactionP *old_trans = trans;
@@ -886,7 +886,7 @@ BOOLEAN CustSeq::add(String &pat, StringSet &lits)
 //       pos += 1 + ud() * ntrans / patlen;
 //     }
 
-  return TRUE;
+  return true;
 }
 
 

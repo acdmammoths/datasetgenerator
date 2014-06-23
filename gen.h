@@ -39,11 +39,11 @@ public:
   FLOAT tlen;	// average transaction length
   LINT nitems;	// number of items
   PatternPar lits;	// parameters for potentially large itemsets
-  BOOLEAN ascii;        // Generate in ASCII format
+  bool ascii;        // Generate in ASCII format
   LINT seed;    // Seed to initialize RandSeed with before x-act generation
 
   TransPar(void)
-    : ntrans(1000000), tlen(10), nitems(100000), ascii(FALSE), seed(INIT_SEED)
+    : ntrans(1000000), tlen(10), nitems(100000), ascii(false), seed(INIT_SEED)
   {}
 
   void write(ostream &fp);
@@ -81,7 +81,7 @@ public:
   FLOAT rept;		// repetition-level (between 0 and 1)
   FLOAT rept_var;	// variation in repetition-level
 
-  BOOLEAN ascii;        // Generate in ASCII format
+  bool ascii;        // Generate in ASCII format
 
   PatternPar lits;	// parameters for potentially large itemsets
   PatternPar lseq;	// parameters for potentially large sequences
@@ -259,14 +259,14 @@ private:
   static LINT tid;	// transaction-id
 
   void sort(void);
-  BOOLEAN add_item(LINT itm);// returns TRUE if added, FALSE if already present
+  bool add_item(LINT itm);// returns true if added, false if already present
 public:
   Transaction(LINT sz);
   ~Transaction();
 
-  BOOLEAN add(String &pat, BOOLEAN corrupt = TRUE);
+  bool add(String &pat, bool corrupt = true);
 	// adds pattern to transaction
-	// returns TRUE if added, FALSE if trans. full
+	// returns true if added, false if trans. full
   void write(ofstream &fp, LINT cid = 0);
   void write_asc(ofstream &fp, LINT cid = 0);
   LINT size(void) { return nitems; }
@@ -289,7 +289,7 @@ public:
   CustSeq(Cid cid, LINT seq_len, LINT tot_items);
   ~CustSeq(void);
 
-  BOOLEAN add(String &pat, StringSet &lits);	// adds pattern to transaction
+  bool add(String &pat, StringSet &lits);	// adds pattern to transaction
   void write(ofstream &fp);
   void write_asc(ofstream &fp);
   LINT size(void) { return nitems; }

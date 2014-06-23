@@ -12,7 +12,7 @@ extern char data_file[];
 extern char pat_file[];
 extern char tax_file[];
 
-static BOOLEAN userfile = FALSE;
+static bool userfile = false;
 
 void err_msg(const char *str)
 {
@@ -207,11 +207,11 @@ void get_args(TransPar &par, int argc, char **argv)
         strcat(data_file, ".data");
         strcpy(pat_file, argv[arg_pos++]);
         strcat(pat_file, ".pat");
-        userfile = TRUE;
+        userfile = true;
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-ascii") == 0) {
-	par.ascii = TRUE;
+	par.ascii = true;
 	cat_fname(".ascii", "");
 	arg_pos++;
 	continue;
@@ -330,11 +330,11 @@ void get_args(TaxPar &par, int argc, char **argv)
         strcat(pat_file, ".pat");
         strcpy(tax_file, argv[arg_pos++]);
         strcat(tax_file, ".tax");
-        userfile = TRUE;
+        userfile = true;
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-ascii") == 0) {
-	par.ascii = TRUE;
+	par.ascii = true;
 	cat_fname(".ascii", "");
 	arg_pos++;
 	continue;
@@ -472,11 +472,11 @@ void get_args(SeqPar &par, int argc, char **argv)
         strcat(pat_file, ".pat");
         strcpy(tax_file, argv[arg_pos++]);
         strcat(tax_file, ".tax");
-        userfile = TRUE;
+        userfile = true;
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-ascii") == 0) {
-	par.ascii = TRUE;
+	par.ascii = true;
 	cat_fname(".ascii", "");
 	arg_pos++;
 	continue;
