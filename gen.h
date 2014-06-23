@@ -1,6 +1,5 @@
 #include "glob.h"
 #include "dist.h"
-//#include <stream.h>
 #include <fstream>
 // g++ START
 #include <iostream>

@@ -1,4 +1,4 @@
-#include <math.h>
+#include <cmath>
 #include "dist.h"
 
 float ExpDist::expdev(void)

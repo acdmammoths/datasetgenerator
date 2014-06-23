@@ -1,7 +1,7 @@
 //
 // command line help  & get arguments
 //
-#include <string.h>
+#include <cstring>
 #include "glob.h"
 #include "gen.h"
 

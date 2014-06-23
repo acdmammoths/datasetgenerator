@@ -1,4 +1,4 @@
-#include <math.h>
+#include <cmath>
 #include "dist.h"
 #define PI 3.141592654
 

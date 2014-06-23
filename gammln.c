@@ -1,4 +1,4 @@
-#include <math.h>
+#include <cmath>
 
 float gammln(float xx)
 {

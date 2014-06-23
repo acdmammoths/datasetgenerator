@@ -1,10 +1,9 @@
+#include <cstdio>
+#include <cstring>
 #include <fstream>
-#include <stdio.h>
 #include <new>
 #include "glob.h"
 #include "gen.h"
-// g++ 
-#include <string.h>
 
 // prototypes
 void command_line(TransPar &par);

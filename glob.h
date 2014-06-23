@@ -1,6 +1,6 @@
 // Some global declarations
 
-#include <stdlib.h>
+#include <cstdlib>
 
 typedef int LINT;
 typedef float FLOAT;

@@ -1,7 +1,7 @@
 #include "gen.h"
-#include <assert.h>
-#include <string.h>
-#include <math.h>
+#include <cassert>
+#include <cmath>
+#include <cstring>
 
 
 //------------------------------- Parameters -------------------------------
