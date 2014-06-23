@@ -7,14 +7,16 @@ Copyright (c) 2014 Matteo Riondato <matteo@cs.brown.edu>
 
 History
 -------
-Once upon a time, the IBM Almaden group published a synthetic transactional
-dataset generator. The workings of the generator were described in XXX. The
-original version could be downloaded from 
+Once upon a time (possibly on July 22 1997), the IBM Almaden group published a
+synthetic transactional dataset generator. The workings of the generator were
+described in 'R. Agrawal and R. Srikant. Fast algorithms for mining association
+rules in large databases. In Proc. 20th Int. Conf. Very Large Data Bases, VLDB
+’94, pages 487–499, 1994'. The original version could be downloaded from
 http://www.almaden.ibm.com/cs/quest/syndata.html (that page no longer exists).
 
-After a while, the IBM version could not be compiled with "modern" g++ compilers
-anymore. [Paolo Palmerini](paolo.palmerini@cnuce.cnr.it) published a
-g++-compilable modified version of the generator on his
+After a while (around 2002-2003), the IBM version could not be compiled with
+"modern" g++ compilers anymore. [Paolo Palmerini](paolo.palmerini@cnuce.cnr.it)
+published a g++-compilable modified version of the generator on his
 [website](http://miles.cnuce.cnr.it/~palmeri/datam/DCI/datasets.php). Paolo's
 modifications can be found in the source code by looking for comments
 highlighted by "// g++". 
