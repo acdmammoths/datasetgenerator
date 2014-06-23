@@ -32,7 +32,7 @@ information and Matteo Riondato is not aware of the licensing of the original
 IBM code. If you have information about this, please let Matteo know by writing
 him an email at matteo@cs.brown.edu . Assuming the code was in the public
 domain, Matteo is licensing this code under the Apache License, Version 2.0. See
-the LICENSE(LICENSE) file and the NOTICE(NOTICE) file. 
+the LICENSE(./LICENSE) file and the NOTICE(./NOTICE) file. 
 
 Install
 -------
