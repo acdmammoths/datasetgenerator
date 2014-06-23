@@ -1,8 +1,10 @@
-#include "gen.h"
 #include <cassert>
+#include <cfloat>
 #include <cmath>
 #include <cstring>
-
+#include <random>
+#include "gen.h"
+#include "glob.h"
 
 //------------------------------- Parameters -------------------------------
 
@@ -123,7 +125,7 @@ Taxonomy::Taxonomy(LINT num_items,	// total number of items
 {
   LINT i, j;
   LINT next_child;
-  PoissonDist nchildren(fanout-1);	// string length
+  poisson_distribution<LINT> nchildren(fanout - 1); // string length
  
   // allocate memory
   par = new LINT [nitems];
@@ -140,7 +142,7 @@ Taxonomy::Taxonomy(LINT num_items,	// total number of items
   for (i = 0, j = next_child; i < nitems && next_child < nitems; i++)
     {
       child_start[i] = next_child;
-      next_child += nchildren() + 1;
+      next_child += nchildren(generator) + 1;
       if (next_child > nitems) 
 	next_child = nitems;
       child_end[i] = next_child;
@@ -199,9 +201,8 @@ void Taxonomy::display(ofstream &fp)
 ItemSet::ItemSet(LINT num_items, 	// number of items
 		 Taxonomy *ptax		// taxonomy (optional)
 		 )
-  : nitems(num_items), tax(ptax) 
+  : nitems(num_items), tax(ptax)
 {
-  ExpDist freq;
   LINT i, j;
 
   cum_prob = new FLOAT [nitems];
@@ -210,7 +211,7 @@ ItemSet::ItemSet(LINT num_items, 	// number of items
   else
     tax_prob = NULL;
   for (i = 0; i < nitems; i++)
-    cum_prob[i] = freq();	// prob. that this pattern will be picked
+    cum_prob[i] = get_unit_exponential_deviate();	// prob. that this pattern will be picked
 
   if (tax) {			// weight(itm) += wieght(children)
     // normalize probabilities for the roots and for children
@@ -268,7 +269,7 @@ Item ItemSet::get_item(void)
   LINT i;
 
   // find the desired pattern using cum_prob table
-  r = rand();
+  r = get_uniform_deviate();
   // want item i such that cum_prob[i-1] < r <= cum_prob[i];
 
   // g++ added cast to LINT below (two lines)
@@ -305,7 +306,7 @@ Item ItemSet::specialize(Item itm)
   last = tax->child(itm, nchildren-1);
 
   // find the desired pattern using cum_prob table
-  r = rand();
+  r = get_uniform_deviate(); 
   // g++ added cast to LINT 
   i = LINT (first + r * nchildren);
   if (i == last)
@@ -442,12 +443,9 @@ StringSet::StringSet(LINT nitems, 	// number of items
 		     )
   : tax(ptax)
 {
-  NormalDist conf(par.conf, par.conf_var);
-  ExpDist freq;
-  ExpDist corr_lvl;
-  PoissonDist len(par.patlen-1);	// string length
-  NormalDist repeat(rept, rept_var);
-  UniformDist ud;
+  normal_distribution<double> conf(par.conf, sqrt(par.conf_var));
+  poisson_distribution<LINT> len(par.patlen - 1); // string length
+  normal_distribution<double> repeat(rept, sqrt(rept_var));
 
   items = new ItemSet(nitems, tax);	// associate probabilities with items
 
@@ -459,12 +457,12 @@ StringSet::StringSet(LINT nitems, 	// number of items
   pat = new StringP [npats];
   for (i = 0; i < npats; i++)
     {
-      pat[i] = new String( 1+len() );
+      pat[i] = new String(1 + len(generator));
 
       // fill correlated items
       if (par.corr > 0 && i > 0) {	// correlated patterns
 	// each pattern has some items same as the previous pattern
-	num_same = LINT( pat[i]->size() * par.corr * corr_lvl() + 0.5 );
+	num_same = LINT( pat[i]->size() * par.corr * get_unit_exponential_deviate() + 0.5 );
 	if ( num_same > pat[i-1]->size() )
 	  num_same = pat[i-1]->size();
 	if ( num_same > pat[i]->size() )
@@ -489,15 +487,15 @@ StringSet::StringSet(LINT nitems, 	// number of items
       }
       else {
 	// some items are repetitions
-	FLOAT rept_lvl = repeat();
+	FLOAT rept_lvl = repeat(generator);
 	for (j = num_same; j < pat[i]->size(); j++)
-	  if ( j > 0 && ud() < rept_lvl )	// pick a previous item
-	    pat[i]->items[j] = pat[i]->items[ LINT(j*ud()) ];
+	  if ( j > 0 && get_uniform_deviate() < rept_lvl )	// pick a previous item
+	    pat[i]->items[j] = pat[i]->items[ LINT(j * get_uniform_deviate()) ];
 	  else	// pick random item
 	    pat[i]->items[j] = items->get_item();
       }
-      pat[i]->prob = freq(); // prob. that this pattern will be picked
-      pat[i]->conf = conf(); // used in Transaction::add and CustSeq::add
+      pat[i]->prob = get_unit_exponential_deviate(); // prob. that this pattern will be picked
+      pat[i]->conf = conf(generator); // used in Transaction::add and CustSeq::add
       			     // to decide how many items to drop from
 			     //  this pattern to corrupt it
     }
@@ -627,7 +625,7 @@ StringP StringSetIter::get_pat(void)
   }
 
   // find the desired pattern using cum_prob table
-  r = rand();
+  r = get_uniform_deviate();
   // g++ LINT  my love once again 
   i = LINT (r * strset->npats);
   if (i == strset->npats)
@@ -715,19 +713,18 @@ bool Transaction::add_item(LINT itm)
 //
 bool Transaction::add(String &pat, bool corrupt)
 {
-  static UniformDist ud;
   LINT i, patlen;
 
   // corrupt the pattern by reducing its length;
   // conf_lvl for a pattern is decided at the time of pattern creation
   patlen = pat.size();
   if ( corrupt )
-    while ( patlen > 0 && ud() > pat.conf_lvl() )
+    while ( patlen > 0 && get_uniform_deviate() > pat.conf_lvl() )
       patlen--;
   
   // in half of the cases, we drop the pattern that won't fit
   if ( patlen+nitems > tlen )	// not enough space left
-    if ( ud() > 0.5 )
+    if ( get_uniform_deviate() > 0.5 )
       return false;
   
   // pick "patlen" items at random from pattern
@@ -806,13 +803,12 @@ CustSeq::~CustSeq()
 //
 bool CustSeq::add(String &pat, StringSet &lits)
 {
-  static UniformDist ud;
   LINT i, patlen;
   LINT pos;
   LINT newitems, olditems;
   bool corrupt;	// if true, corrupt transactions too
 
-  if ( ud() > pat.conf_lvl() )
+  if (get_uniform_deviate() > pat.conf_lvl())
     corrupt = true;		// corrupt transactions
   else
     corrupt = false;		// don't corrupt transactions
@@ -821,7 +817,7 @@ bool CustSeq::add(String &pat, StringSet &lits)
   // conf_lvl for a pattern is decided at the time of pattern creation
   patlen = pat.size();
   if ( corrupt )
-    while ( patlen > 0 && ud() > pat.conf_lvl() )
+    while ( patlen > 0 && get_uniform_deviate() > pat.conf_lvl() )
       patlen--;
   if ( patlen == 0 )	// no trans. left in sequence
     return true;
@@ -838,7 +834,7 @@ bool CustSeq::add(String &pat, StringSet &lits)
 
   // in half of the cases, we drop the pattern that won't fit
   if ( (patlen > slen) || (newitems + nitems > slen * tlen) )
-    if ( ud() > 0.5 )
+    if ( get_uniform_deviate() > 0.5 )
       return false;
 
   if ( patlen > maxsize ) {	// need to allocate more memory

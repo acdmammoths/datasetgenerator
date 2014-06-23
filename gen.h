@@ -1,11 +1,13 @@
-#include "glob.h"
-#include "dist.h"
+#ifndef GEN_H
+#define GEN_H
+#include <cfloat>
 #include <fstream>
-// g++ START
 #include <iostream>
 #include <iomanip>
+
+#include "choose.h"
+
 using namespace std;
-// g++ STOP
 
 //=============================  Parameters  =============================
 
@@ -39,10 +41,10 @@ public:
   LINT nitems;	// number of items
   PatternPar lits;	// parameters for potentially large itemsets
   bool ascii;        // Generate in ASCII format
-  LINT seed;    // Seed to initialize RandSeed with before x-act generation
+  LINT seed;    // Seed to initialize the generator with before x-act generation
 
   TransPar(void)
-    : ntrans(1000000), tlen(10), nitems(100000), ascii(false), seed(INIT_SEED)
+    : ntrans(1000000), tlen(10), nitems(100000), ascii(false), seed(-1)
   {}
 
   void write(ostream &fp);
@@ -154,7 +156,6 @@ private:
   Taxonomy *tax;	// taxonomy (optional)
   FLOAT *cum_prob;	// cumulative probability
   FLOAT *tax_prob;	// cumulative probability of choosing a child
-  UniformDist rand;
 
   void normalize(FLOAT prob[], LINT low, LINT high);
 public:
@@ -231,7 +232,6 @@ public:
 class StringSetIter
 {
 private:
-  UniformDist rand;
   StringSet *strset;
   LINT last_pat;	// if -ve, unget_pat() was called
 public:
@@ -293,3 +293,6 @@ public:
   void write_asc(ofstream &fp);
   LINT size(void) { return nitems; }
 };
+
+#endif
+

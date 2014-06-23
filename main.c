@@ -1,7 +1,8 @@
+#include <chrono>
 #include <cstdio>
-#include <cstdlib>
 #include <cstring>
 #include <fstream>
+#include <iostream>
 #include <new>
 #include "glob.h"
 #include "gen.h"
@@ -23,18 +24,16 @@ char data_file[256];
 char pat_file[256];
 char tax_file[256];
 
-
-void memory_err(void)
-{
-  cout << "A memory allocation error occurred. \n";
-  exit(1);
-}
-
-
 int main(int argc, char **argv)
 {
 
   set_new_handler(memory_err);
+#ifndef DEBUG
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+#else
+  unsigned seed = 0;
+#endif
+  seed_generator(seed);
 
   if (::strcmp(argv[1], "lit") == 0) {
     // For Rules
@@ -85,7 +84,7 @@ void gen_rules(TransPar &par)
   StringSet *lits;
   StringSetIter *patterns;
   Transaction *trans;
-  PoissonDist *tlen;
+  poisson_distribution<LINT> tlen(par.tlen - 1);
 
   ofstream data_fp;
   ofstream pat_fp;
@@ -95,10 +94,8 @@ void gen_rules(TransPar &par)
   
   lits = new StringSet(par.nitems, par.lits);
 
-  // Reset random seed generator for before generating transactions
-  if (par.seed < 0) RandSeed::set_seed(par.seed);
-
-  tlen = new PoissonDist(par.tlen-1);
+  // Reset random seed generator before generating transactions
+  if (par.seed < 0) generator.seed(par.seed);
 
   par.write(pat_fp);
   lits->display(pat_fp);
@@ -106,7 +103,7 @@ void gen_rules(TransPar &par)
   patterns = new StringSetIter(*lits);
   for (LINT i = 0; i < par.ntrans; i ++)
     {
-      trans = mk_tran(*patterns, (*tlen)()+1);
+      trans = mk_tran(*patterns, tlen(generator) + 1);
       if (par.ascii) 
 	trans->write_asc(data_fp);
       else 
@@ -127,7 +124,7 @@ void gen_taxrules(TaxPar &par)
   StringSet *lits;
   StringSetIter *patterns;
   Transaction *trans;
-  PoissonDist *tlen;
+  poisson_distribution<LINT> tlen(par.tlen - 1);
 
   ofstream data_fp;
   ofstream pat_fp;
@@ -148,8 +145,6 @@ void gen_taxrules(TaxPar &par)
   else
     tax->write(tax_fp);
 
-  tlen = new PoissonDist(par.tlen-1);
-
   lits = new StringSet(par.nitems, par.lits, tax);
 
   par.write(pat_fp);
@@ -158,7 +153,7 @@ void gen_taxrules(TaxPar &par)
   patterns = new StringSetIter(*lits);
   for (LINT i = 0; i < par.ntrans; i ++)
     {
-      trans = mk_tran(*patterns, (*tlen)()+1, tax);
+      trans = mk_tran(*patterns, tlen(generator) + 1, tax);
       if (par.ascii) 
 	trans->write_asc(data_fp);
       else 
@@ -205,8 +200,8 @@ void gen_seq(SeqPar &par)
   StringSetIter *patterns;
   StringSet *lits;	// potentially large itemsets	
   CustSeq *cust;	// 
-  PoissonDist *slen;
-  PoissonDist *tlen;
+  poisson_distribution<LINT> tlen(par.tlen - 1);
+  poisson_distribution<LINT> slen(par.slen - 1);
 
   ofstream data_fp;
   ofstream pat_fp;
@@ -214,9 +209,6 @@ void gen_seq(SeqPar &par)
   data_fp.open(data_file, ios::trunc);
   pat_fp.open(pat_file, ios::trunc);
   
-  slen = new PoissonDist(par.slen-1);
-  tlen = new PoissonDist(par.tlen-1);
-
   lits = new StringSet(par.nitems, par.lits);
   lseq = new StringSet(par.lits.npats, par.lseq, NULL, par.rept, par.rept_var);
 
@@ -229,7 +221,7 @@ void gen_seq(SeqPar &par)
   patterns = new StringSetIter(*lseq);
   for (LINT i = 0; i < par.ncust; i ++)
     {
-      cust = mk_seq(i+1, *patterns, *lits, (*slen)()+1, (*tlen)()+1);
+      cust = mk_seq(i+1, *patterns, *lits, slen(generator) + 1, tlen(generator) + 1);
       if (par.ascii) 
 	cust->write_asc(data_fp);
       else 
@@ -265,5 +257,4 @@ CustSeq *mk_seq(Cid cid,		// customer-id
     }
   return cust;
 }
-
 
