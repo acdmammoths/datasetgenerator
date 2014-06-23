@@ -22,8 +22,8 @@ modifications can be found in the source code by looking for comments
 highlighted by "// g++". 
 
 As of June 2014 Paolo's version does not compile on current g++ (e.g., g++-4.9).
-Matteo Riondato (<matteo@cs.brown.edu>) took up the task to port the code to C++11
-and make it compile with the current g++.
+[Matteo Riondato](http://cs.brown.edu/~matteo) (<matteo@cs.brown.edu>) took up
+the task to port the code to C++11 and make it compile with the current g++.
 
 License
 -------
