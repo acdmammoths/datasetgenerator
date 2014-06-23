@@ -6,18 +6,14 @@
 #include "gen.h"
 
 // prototypes
-void command_line(TransPar &par);
 void get_args(TransPar &par, int argc, char **argv);
 void gen_rules(TransPar &par);
 Transaction *mk_tran(StringSetIter &lits, LINT tlen, Taxonomy *tax = NULL);
 
-void command_line(TaxPar &par);
 void get_args(TaxPar &par, int argc, char **argv);
 void gen_taxrules(TaxPar &par);
 
-void command_line(SeqPar &par);
 void get_args(SeqPar &par, int argc, char **argv);
-void print_version(void);
 
 void gen_seq(SeqPar &par);
 CustSeq *mk_seq(Cid cid, StringSetIter &lseq, StringSet &lits, LINT slen, LINT tlen);
@@ -64,13 +60,13 @@ int main(int argc, char **argv)
   }
 
   else if (::strcmp(argv[1], "-version") == 0) {
-    print_version();
+	cout << VERSION << endl;
     return 0;
   }
 
   else {
     cerr << "Synthetic Data Generation, ";
-    print_version();
+	cerr << VERSION << endl;
     cerr << "Usage:  " << argv[0] << " lit|tax|seq [options]\n";
     cerr << "        " << argv[0] 
       << " lit|tax|seq -help     For more detailed list of options\n";

@@ -1,12 +1,10 @@
 //
 // command line help  & get arguments
 //
+#include <cstdlib>
 #include <cstring>
 #include "glob.h"
 #include "gen.h"
-
-// g++ all the occurrences of strings functions were modified adding the :: 
-#define VERSION "Version dated July 22, 1997"
 
 extern char data_file[];
 extern char pat_file[];
@@ -14,117 +12,110 @@ extern char tax_file[];
 
 static bool userfile = false;
 
-void err_msg(const char *str)
+void exit_fail_with_msg(const char *str)
 {
-  cerr << str << flush;
-  exit(1);
+  cerr << str << endl;
+  exit(EXIT_FAILURE);
 }
-
-
-void print_version(void)
-{
-  cerr << VERSION << endl;
-}
-
 
 void command_line(TaxPar &par)
 {
   par.calc_values();
 
-  cerr << "Command Line Options:\n";
+  cerr << "Command Line Options:" << endl;
   cerr << "  -ntrans number_of_transactions_in_000s (default: "
-       << par.ntrans/1000 << ")\n";
-  cerr << "  -tlen avg_items_per_transaction (default: " << par.tlen << ")\n";
+       << par.ntrans/1000 << ")" << endl;
+  cerr << "  -tlen avg_items_per_transaction (default: " << par.tlen << ")" << endl;
   cerr << "  -nitems number_of_different_items_in_000s (default: "
-       << par.nitems/1000 << ")\n";
-  cerr << "  -nroots number_of_roots (default: " << par.nroots << ")\n";
+       << par.nitems/1000 << ")" << endl;
+  cerr << "  -nroots number_of_roots (default: " << par.nroots << ")" << endl;
   cerr << "  -nlevels number_of_different_levels (default: " << par.nlevels
-       << ")\n";
-  cerr << "  -fanout average_fanout (default: " << par.fanout << ")\n";
+       << ")" << endl;
+  cerr << "  -fanout average_fanout (default: " << par.fanout << ")" << endl;
   cerr << "  -depth affects_average_depth_of_items_in_itemsets (default: "
-    << par.depth_ratio << ")\n";
+    << par.depth_ratio << ")" << endl;
   cerr << endl;
 
-  cerr << "  -npats number_of_patterns (default: " << par.lits.npats << ")\n";
+  cerr << "  -npats number_of_patterns (default: " << par.lits.npats << ")" << endl;
   cerr << "  -patlen avg_length_of_maximal_pattern (default: "
-       << par.lits.patlen << ")\n";
+       << par.lits.patlen << ")" << endl;
   cerr << "  -corr correlation_between_patterns (default: " << par.lits.corr
-       << ")\n";
+       << ")" << endl;
   cerr << "  -conf avg_confidence_in_a_rule (default: " << par.lits.conf
-       << ")\n";
+       << ")" << endl;
   cerr << endl;
 
-  cerr << "  -fname <filename> (write to filename.data and filename.pat)\n";
-  cerr << "  -ascii (Write data in ASCII format; default: " << (par.ascii? "True": "False") << ")\n";
-  cerr << "  -randseed # (reset seed used generate to x-acts; must be negative)\n";
-  cerr << "  -version (to print out version info)\n";
-  exit(1);
+  cerr << "  -fname <filename> (write to filename.data and filename.pat)" << endl;
+  cerr << "  -ascii (Write data in ASCII format; default: " << (par.ascii? "True": "False") << ")" << endl;
+  cerr << "  -randseed # (reset seed used generate to x-acts; must be negative)" << endl;
+  cerr << "  -version (to print out version info)" << endl;
+  exit(EXIT_FAILURE);
 }
 
 
 void command_line(TransPar &par)
 {
-  cerr << "Command Line Options:\n";
+  cerr << "Command Line Options:" << endl;
   cerr << "  -ntrans number_of_transactions_in_000s (default: "
-       << par.ntrans/1000 << ")\n";
-  cerr << "  -tlen avg_items_per_transaction (default: " << par.tlen << ")\n";
+       << par.ntrans/1000 << ")" << endl;
+  cerr << "  -tlen avg_items_per_transaction (default: " << par.tlen << ")" << endl;
   cerr << "  -nitems number_of_different_items_in_000s) (default: "
-       << par.nitems/1000 << ")\n";
+       << par.nitems/1000 << ")" << endl;
   cerr << endl;
 
-  cerr << "  -npats number_of_patterns (default: " << par.lits.npats << ")\n";
+  cerr << "  -npats number_of_patterns (default: " << par.lits.npats << ")" << endl;
   cerr << "  -patlen avg_length_of_maximal_pattern (default: "
-       << par.lits.patlen << ")\n";
+       << par.lits.patlen << ")" << endl;
   cerr << "  -corr correlation_between_patterns (default: " << par.lits.corr
-       << ")\n";
+       << ")" << endl;
   cerr << "  -conf avg_confidence_in_a_rule (default: " << par.lits.conf
-       << ")\n";
+       << ")" << endl;
   cerr << endl;
 
-  cerr << "  -fname <filename> (write to filename.data and filename.pat)\n";
-  cerr << "  -ascii (default: " << (par.ascii? "True": "False") << ")\n";
-  cerr << "  -randseed # (reset seed used generate to x-acts; must be negative)\n";
-  cerr << "  -version (to print out version info)\n";
-  exit(1);
+  cerr << "  -fname <filename> (write to filename.data and filename.pat)" << endl;
+  cerr << "  -ascii (default: " << (par.ascii? "True": "False") << ")" << endl;
+  cerr << "  -randseed # (reset seed used generate to x-acts; must be negative)" << endl;
+  cerr << "  -version (to print out version info)" << endl;
+  exit(EXIT_FAILURE);
 }
 
 
 void command_line(SeqPar &par)
 {
-  cerr << "Command Line Options:\n";
+  cerr << "Command Line Options:" << endl;
   cerr << "  -ncust number_of_customers_in_000s (default: "
-       << par.ncust/1000 << ")\n";
-  cerr << "  -slen avg_trans_per_customer (default: " << par.slen << ")\n";
-  cerr << "  -tlen avg_items_per_transaction (default: " << par.tlen << ")\n";
+       << par.ncust/1000 << ")" << endl;
+  cerr << "  -slen avg_trans_per_customer (default: " << par.slen << ")" << endl;
+  cerr << "  -tlen avg_items_per_transaction (default: " << par.tlen << ")" << endl;
   cerr << "  -nitems number_of_different_items_in_000s (default: "
-       << par.nitems/1000 << ")\n";
-  cerr << "  -rept repetition-level (default: " << par.rept << ")\n";
+       << par.nitems/1000 << ")" << endl;
+  cerr << "  -rept repetition-level (default: " << par.rept << ")" << endl;
   cerr << endl;
 
   cerr << "  -seq.npats number_of_seq_patterns (default: " << par.lseq.npats
-       << ")\n";
+       << ")" << endl;
   cerr << "  -seq.patlen avg_length_of_maximal_pattern (default: "
-       << par.lseq.patlen << ")\n";
+       << par.lseq.patlen << ")" << endl;
   cerr << "  -seq.corr correlation_between_patterns (default: "
-       << par.lseq.corr << ")\n";
+       << par.lseq.corr << ")" << endl;
   cerr << "  -seq.conf avg_confidence_in_a_rule (default: " << par.lseq.conf
-       << ")\n";
+       << ")" << endl;
   cerr << endl;
 
   cerr << "  -lit.npats number_of_patterns (default: " << par.lits.npats
-       << ")\n";
+       << ")" << endl;
   cerr << "  -lit.patlen avg_length_of_maximal_pattern (default: "
-       << par.lits.patlen << ")\n";
+       << par.lits.patlen << ")" << endl;
   cerr << "  -lit.corr correlation_between_patterns (default: "
-       << par.lits.corr << ")\n";
+       << par.lits.corr << ")" << endl;
   cerr << "  -lit.conf avg_confidence_in_a_rule (default: " << par.lits.conf
-       << ")\n";
+       << ")" << endl;
   cerr << endl;
 
-  cerr << "  -fname <filename> (write to filename.data and filename.pat)\n";
-  cerr << "  -ascii (Write data in ASCII format; default: " << (par.ascii? "True": "False") << ")\n";
-  cerr << "  -version (to print out version info)\n";
-  exit(1);
+  cerr << "  -fname <filename> (write to filename.data and filename.pat)" << endl;
+  cerr << "  -ascii (Write data in ASCII format; default: " << (par.ascii? "True": "False") << ")" << endl;
+  cerr << "  -version (to print out version info)" << endl;
+  exit(EXIT_FAILURE);
 }
 
 
@@ -155,14 +146,14 @@ void get_args(TransPar &par, int argc, char **argv)
 	par.ntrans = LINT (1000 * atof(argv[++arg_pos]));
 	cat_fname(".ntrans_", argv[arg_pos]);
 	arg_pos++;
-	if (par.ntrans < 1) err_msg("ntrans must be >= 1\n");
+	if (par.ntrans < 1) exit_fail_with_msg("ntrans must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-tlen") == 0) {
 	par.tlen = atof(argv[++arg_pos]);
 	cat_fname(".tlen_", argv[arg_pos]);
 	arg_pos++;
-	if (par.tlen < 1) err_msg("tlen must be >= 1\n");
+	if (par.tlen < 1) exit_fail_with_msg("tlen must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-nitems") == 0) {
@@ -170,7 +161,7 @@ void get_args(TransPar &par, int argc, char **argv)
 	par.nitems = LINT (1000 * atof(argv[++arg_pos]));
 	cat_fname(".nitems_", argv[arg_pos]);
 	arg_pos++;
-	if (par.nitems < 1) err_msg("nitems must be >= 1\n");
+	if (par.nitems < 1) exit_fail_with_msg("nitems must be >= 1");
 	continue;
       }
 
@@ -178,14 +169,14 @@ void get_args(TransPar &par, int argc, char **argv)
 	par.lits.npats = atoi(argv[++arg_pos]);
 	cat_fname(".npats_", argv[arg_pos]);
 	arg_pos++;
-	if (par.lits.npats < 1) err_msg("npats must be >= 1\n");
+	if (par.lits.npats < 1) exit_fail_with_msg("npats must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-patlen") == 0) {
 	par.lits.patlen = atof(argv[++arg_pos]);
 	cat_fname(".patlen_", argv[arg_pos]);
 	arg_pos++;
-	if (par.lits.patlen <= 0) err_msg("patlen must be > 0\n");
+	if (par.lits.patlen <= 0) exit_fail_with_msg("patlen must be > 0");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-corr") == 0) {
@@ -199,7 +190,7 @@ void get_args(TransPar &par, int argc, char **argv)
 	cat_fname(".conf_", argv[arg_pos]);
 	arg_pos++;
 	if (par.lits.conf > 1 || par.lits.conf < 0) 
-	  err_msg("conf must be between 0 and 1\n");
+	  exit_fail_with_msg("conf must be between 0 and 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-fname") == 0) {
@@ -220,12 +211,12 @@ void get_args(TransPar &par, int argc, char **argv)
 	par.seed = atoi(argv[++arg_pos]);
 	arg_pos++;
 	if (par.seed >= 0)
-	  err_msg("randseed must be negative.\n");
+	  exit_fail_with_msg("randseed must be negative");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-version") == 0) {
 	cout << VERSION << endl;
-	exit(0);
+	exit(EXIT_SUCCESS);
       }
       else {
 	command_line(par);
@@ -248,14 +239,14 @@ void get_args(TaxPar &par, int argc, char **argv)
 	par.ntrans = LINT (1000 * atof(argv[++arg_pos]));
 	cat_fname(".ntrans_", argv[arg_pos]);
 	arg_pos++;
-	if (par.ntrans < 1) err_msg("ntrans must be >= 1\n");
+	if (par.ntrans < 1) exit_fail_with_msg("ntrans must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-tlen") == 0) {
 	par.tlen = atof(argv[++arg_pos]);
 	cat_fname(".tlen_", argv[arg_pos]);
 	arg_pos++;
-	if (par.tlen < 1) err_msg("tlen must be >= 1\n");
+	if (par.tlen < 1) exit_fail_with_msg("tlen must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-nitems") == 0) {
@@ -263,35 +254,35 @@ void get_args(TaxPar &par, int argc, char **argv)
 	par.nitems = LINT (1000 * atof(argv[++arg_pos]));
 	cat_fname(".nitems_", argv[arg_pos]);
 	arg_pos++;
-	if (par.nitems < 1) err_msg("nitems must be >= 1\n");
+	if (par.nitems < 1) exit_fail_with_msg("nitems must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-nroots") == 0) {
 	par.nroots = atoi(argv[++arg_pos]);
 	cat_fname(".nroots_", argv[arg_pos]);
 	arg_pos++;
-	if (par.nroots < 1) err_msg("nroots must be >= 1\n");
+	if (par.nroots < 1) exit_fail_with_msg("nroots must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-nlevels") == 0) {
 	par.nlevels = atof(argv[++arg_pos]);
 	cat_fname(".nlevels_", argv[arg_pos]);
 	arg_pos++;
-	if (par.nlevels < 1) err_msg("nlevels must be >= 1\n");
+	if (par.nlevels < 1) exit_fail_with_msg("nlevels must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-fanout") == 0) {
 	par.fanout = atof(argv[++arg_pos]);
 	cat_fname(".fanout_", argv[arg_pos]);
 	arg_pos++;
-	if (par.fanout < 1) err_msg("fanout must be >= 1\n");
+	if (par.fanout < 1) exit_fail_with_msg("fanout must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-depth") == 0) {
 	par.depth_ratio = atof(argv[++arg_pos]);
 	cat_fname(".depth_", argv[arg_pos]);
 	arg_pos++;
-	if (par.depth_ratio <= 0) err_msg("fanout must be > 0\n");
+	if (par.depth_ratio <= 0) exit_fail_with_msg("fanout must be > 0");
 	continue;
       }
 
@@ -299,14 +290,14 @@ void get_args(TaxPar &par, int argc, char **argv)
 	par.lits.npats = atoi(argv[++arg_pos]);
 	cat_fname(".npats_", argv[arg_pos]);
 	arg_pos++;
-	if (par.lits.npats < 1) err_msg("npats must be >= 1\n");
+	if (par.lits.npats < 1) exit_fail_with_msg("npats must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-patlen") == 0) {
 	par.lits.patlen = atof(argv[++arg_pos]);
 	cat_fname(".patlen_", argv[arg_pos]);
 	arg_pos++;
-	if (par.lits.patlen <= 0) err_msg("patlen must be > 0\n");
+	if (par.lits.patlen <= 0) exit_fail_with_msg("patlen must be > 0");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-corr") == 0) {
@@ -320,7 +311,7 @@ void get_args(TaxPar &par, int argc, char **argv)
 	cat_fname(".conf_", argv[arg_pos]);
 	arg_pos++;
 	if (par.lits.conf > 1 || par.lits.conf < 0) 
-	  err_msg("conf must be between 0 and 1\n");
+	  exit_fail_with_msg("conf must be between 0 and 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-fname") == 0) {
@@ -343,12 +334,12 @@ void get_args(TaxPar &par, int argc, char **argv)
 	par.seed = atoi(argv[++arg_pos]);
 	arg_pos++;
 	if (par.seed >= 0)
-	  err_msg("randseed must be negative.\n");
+	  exit_fail_with_msg("randseed must be negative");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-version") == 0) {
 	cout << VERSION << endl;
-	exit(0);
+	exit(EXIT_SUCCESS);
       }
       else {
 	command_line(par);
@@ -373,21 +364,21 @@ void get_args(SeqPar &par, int argc, char **argv)
 	par.ncust = LINT (1000 * atof(argv[++arg_pos]));
 	cat_fname(".ncust_", argv[arg_pos]);
 	arg_pos++;
-	if (par.ncust < 1) err_msg("ntrans must be >= 1\n");
+	if (par.ncust < 1) exit_fail_with_msg("ntrans must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-slen") == 0) {
 	par.slen = atof(argv[++arg_pos]);
 	cat_fname(".slen_", argv[arg_pos]);
 	arg_pos++;
-	if (par.slen < 1) err_msg("slen must be >= 1\n");
+	if (par.slen < 1) exit_fail_with_msg("slen must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-tlen") == 0) {
 	par.tlen = atof(argv[++arg_pos]);
 	cat_fname(".tlen_", argv[arg_pos]);
 	arg_pos++;
-	if (par.tlen < 1) err_msg("tlen must be >= 1\n");
+	if (par.tlen < 1) exit_fail_with_msg("tlen must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-nitems") == 0) {
@@ -395,7 +386,7 @@ void get_args(SeqPar &par, int argc, char **argv)
 	par.nitems = LINT (1000 * atof(argv[++arg_pos]));
 	cat_fname(".nitems_", argv[arg_pos]);
 	arg_pos++;
-	if (par.nitems < 1) err_msg("nitems must be >= 1\n");
+	if (par.nitems < 1) exit_fail_with_msg("nitems must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-rept") == 0) {
@@ -403,7 +394,7 @@ void get_args(SeqPar &par, int argc, char **argv)
 	cat_fname(".rept_", argv[arg_pos]);
 	arg_pos++;
 	if (par.rept < 0 || par.rept > 1) 
-	  err_msg("repetition-level must be between 0 and 1\n");
+	  exit_fail_with_msg("repetition-level must be between 0 and 1");
 	continue;
       }
 
@@ -411,14 +402,14 @@ void get_args(SeqPar &par, int argc, char **argv)
 	par.lseq.npats = atoi(argv[++arg_pos]);
 	cat_fname(".seq.npats_", argv[arg_pos]);
 	arg_pos++;
-	if (par.lseq.npats < 1) err_msg("npats must be >= 1\n");
+	if (par.lseq.npats < 1) exit_fail_with_msg("npats must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-seq.patlen") == 0) {
 	par.lseq.patlen = atof(argv[++arg_pos]);
 	cat_fname(".seq.patlen_", argv[arg_pos]);
 	arg_pos++;
-	if (par.lseq.patlen <= 0) err_msg("patlen must be > 0\n");
+	if (par.lseq.patlen <= 0) exit_fail_with_msg("patlen must be > 0");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-seq.corr") == 0) {
@@ -432,7 +423,7 @@ void get_args(SeqPar &par, int argc, char **argv)
 	cat_fname(".seq.conf_", argv[arg_pos]);
 	arg_pos++;
 	if (par.lseq.conf > 1 || par.lseq.conf < 0) 
-	  err_msg("conf must be between 0 and 1\n");
+	  exit_fail_with_msg("conf must be between 0 and 1");
 	continue;
       }
 
@@ -440,14 +431,14 @@ void get_args(SeqPar &par, int argc, char **argv)
 	par.lits.npats = atoi(argv[++arg_pos]);
 	cat_fname(".lit.npats_", argv[arg_pos]);
 	arg_pos++;
-	if (par.lits.npats < 1) err_msg("npats must be >= 1\n");
+	if (par.lits.npats < 1) exit_fail_with_msg("npats must be >= 1");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-lit.patlen") == 0) {
 	par.lits.patlen = atof(argv[++arg_pos]);
 	cat_fname(".lit.patlen_", argv[arg_pos]);
 	arg_pos++;
-	if (par.lits.patlen <= 0) err_msg("patlen must be > 0\n");
+	if (par.lits.patlen <= 0) exit_fail_with_msg("patlen must be > 0");
 	continue;
       }
       else if (strcmp(argv[arg_pos], "-lit.corr") == 0) {
@@ -461,7 +452,7 @@ void get_args(SeqPar &par, int argc, char **argv)
 	cat_fname(".lit.conf_", argv[arg_pos]);
 	arg_pos++;
 	if (par.lits.conf > 1 || par.lits.conf < 0) 
-	  err_msg("conf must be between 0 and 1\n");
+	  exit_fail_with_msg("conf must be between 0 and 1");
 	continue;
       }
 
@@ -483,7 +474,7 @@ void get_args(SeqPar &par, int argc, char **argv)
       }
       else if (strcmp(argv[arg_pos], "-version") == 0) {
 	cout << VERSION << endl;
-	exit(0);
+	exit(EXIT_SUCCESS);
       }
       else {
 	command_line(par);
