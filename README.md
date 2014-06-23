@@ -1,7 +1,7 @@
 Dataset Generator
 =================
 
-A porting to C++11 and modern g++ f the IBM transactional dataset generator.
+A porting to C++11 and modern g++ of the IBM transactional dataset generator.
 
 Copyright (c) 2014 Matteo Riondato <matteo@cs.brown.edu>
 
