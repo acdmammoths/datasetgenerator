@@ -9,7 +9,7 @@ OBJECTS2 = gen.o main.o command.o
 
 LIBES = -lm
 CC = g++-4.9
-CFLAGS = -ansi -std=c++11 -Wall -Werror -Wextra -pedantic-errors
+CFLAGS = -ansi -std=c++11 -fabi-version=6 -Ofast -pipe -march=native -mtune=native -Wextra -Wall -Wshadow -Wstrict-aliasing=1 -Werror -pedantic-errors
 
 EXEC = gen 
 

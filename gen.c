@@ -115,11 +115,11 @@ const LINT Taxonomy::item_len = 7;
 // Constructor: reads taxonomy file and builds taxonomy as a DAG
 //
 Taxonomy::Taxonomy(LINT num_items,	// total number of items
-		   LINT num_roots,	// number of roots
+		   LINT my_num_roots,	// number of roots
 		   FLOAT fanout,	// average fanout
-		   FLOAT depth_ratio	// average ratio of ....
+		   FLOAT my_depth_ratio	// average ratio of ....
 		   )
-  : nitems(num_items), nroots(num_roots), depth(depth_ratio)
+  : nitems(num_items), nroots(my_num_roots), depth(my_depth_ratio)
 {
   LINT i, j;
   LINT next_child;
