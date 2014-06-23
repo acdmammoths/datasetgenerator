@@ -1,5 +1,5 @@
 #include "dist.h"
-#include <values.h>
+#include <climits>
 
 //------------------------------- RandSeed -------------------------------
 
@@ -17,8 +17,8 @@ long RandSeed::new_seed(void)
 
   ans = (*ran1)();
   ans *= (*ran1)();
-  //cout << "rand_seed : " << " " << long(-MAXLONG * ans) << endl;
-  return long(-MAXLONG * ans);
+  //cout << "rand_seed : " << " " << long(-LONG_MAX * ans) << endl;
+  return long(-LONG_MAX * ans);
 }
 
 

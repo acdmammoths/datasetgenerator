@@ -14,7 +14,7 @@ extern char tax_file[];
 
 static BOOLEAN userfile = FALSE;
 
-void err_msg(char *str)
+void err_msg(const char *str)
 {
   cerr << str << flush;
   exit(1);
@@ -128,7 +128,7 @@ void command_line(SeqPar &par)
 }
 
 
-void cat_fname(char *str1, char *str2)
+void cat_fname(const char *str1, const char *str2)
 {
   if (userfile) return;
   

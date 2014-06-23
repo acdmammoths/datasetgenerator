@@ -1,6 +1,6 @@
-#include <fstream.h>
+#include <fstream>
 #include <stdio.h>
-#include <new.h>
+#include <new>
 #include "glob.h"
 #include "gen.h"
 // g++ 

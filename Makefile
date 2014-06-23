@@ -8,7 +8,7 @@ OBJECTS1 = ran1.o expdev.o gammln.o gasdev.o poidev.o dist.o
 OBJECTS2 = gen.o main.o command.o
 
 LIBES = -lm
-CC = g++
+CC = g++-4.9
 #CFLAGS = -+ -O
 
 EXEC = gen 

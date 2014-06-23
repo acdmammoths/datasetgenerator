@@ -1,7 +1,7 @@
 #include "glob.h"
 #include "dist.h"
-#include <stream.h>
-#include <fstream.h>
+//#include <stream.h>
+#include <fstream>
 // g++ START
 #include <iostream>
 #include <iomanip>
@@ -167,6 +167,7 @@ public:
   FLOAT weight(Item itm);	// returns prob. of choosing item
 };
 
+class StringSet;
 
 class String
 {
