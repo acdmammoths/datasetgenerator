@@ -177,7 +177,7 @@ void gen_taxrules(TaxPar &par)
 //
 Transaction *mk_tran(StringSetIter &lits,  	// table of patterns
 		     LINT tlen,			// transaction length
-		     Taxonomy *tax
+		     Taxonomy *tax __attribute__((unused))
 		     )
 {
   Transaction *trans;

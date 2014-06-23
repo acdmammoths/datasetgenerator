@@ -157,8 +157,6 @@ Taxonomy::Taxonomy(LINT num_items,	// total number of items
 
 Taxonomy::~Taxonomy(void)
 {
-  LINT i;
-
   delete [] par;
   delete [] child_start;
   delete [] child_end;
@@ -201,7 +199,7 @@ void Taxonomy::display(ofstream &fp)
 ItemSet::ItemSet(LINT num_items, 	// number of items
 		 Taxonomy *ptax		// taxonomy (optional)
 		 )
-  : tax(ptax), nitems(num_items)
+  : nitems(num_items), tax(ptax) 
 {
   ExpDist freq;
   LINT i, j;
@@ -285,7 +283,7 @@ Item ItemSet::get_item(void)
   while ( i > 0 && r <= cum_prob[i-1] )
     i--;
   return i;
-};
+}
 
 
 // if no taxonomy, returns itm
@@ -571,7 +569,7 @@ StringP StringSet::get_pat(LINT i)
     return pat[i];
   else
     return specialize(i);
-};
+}
 
 
 void StringSet::display(ofstream &fp)
@@ -644,7 +642,7 @@ StringP StringSetIter::get_pat(void)
     return strset->pat[i];
   else
     return strset->specialize(i);
-};
+}
 
 
 void StringSetIter::unget_pat(void)
@@ -783,8 +781,8 @@ void Transaction::write_asc(ofstream &fp, LINT cid)
 
 
 CustSeq::CustSeq(Cid cust_id, LINT seq_len, LINT trans_len)
-  : cid(cust_id), slen(seq_len), tlen(trans_len), nitems(0),
-    ntrans(seq_len), maxsize(5 * seq_len)
+  : cid(cust_id), slen(seq_len), tlen(trans_len), ntrans(seq_len), nitems(0),
+	maxsize(5 * seq_len)
 {
   // we reallocate memory if necessary
   trans = new TransactionP [maxsize];

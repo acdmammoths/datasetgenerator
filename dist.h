@@ -28,8 +28,8 @@ public:
 class UniformDist
 {
 private:
-  long idum;
   long iy;
+  long idum;
   long iv[NTAB];
   
   float ran1(void);
