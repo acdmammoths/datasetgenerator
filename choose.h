@@ -11,7 +11,7 @@ class Choose
 private:
 	std::vector<LINT> num; // vector of the positions
 public:
-	Choose(LINT n, LINT k) {
+	Choose(LINT n, LINT k) : num(n) {
 		for (LINT i = 0; i < n; ++i) {
 			num[i] = i;
 		}
