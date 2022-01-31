@@ -6,7 +6,7 @@ OBJECTS = gen.o main.o command.o util.o
 
 LIBS = -lm
 
-CC = g++-4.9
+CC = g++
 
 #PROFILE=-pg
 #GDB=-ggdb3
