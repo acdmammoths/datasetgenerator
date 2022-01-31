@@ -27,6 +27,11 @@ char tax_file[256];
 int main(int argc, char **argv)
 {
 
+  if (argc < 2) {
+	  std::cerr << argv[0] << ": Wrong number of arguments. Run with '-h' for help" << std::endl;
+	  std::exit(1);
+  }
+
   set_new_handler(memory_err);
 #ifndef DEBUG
   unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -257,4 +262,3 @@ CustSeq *mk_seq(Cid cid,		// customer-id
     }
   return cust;
 }
-
