@@ -26,7 +26,7 @@ NPATS=2000                     # L
 PATLEN=8                      # I
 CORR=0.25
 CONF=0.75
-ASCII=
+ASCII="-ascii"
 RANDSEED=
 #RANDSEED=-123456789
 
@@ -50,4 +50,3 @@ for NTRANS in ${L_NTRANS}; do
     done
   done
 done
-
