@@ -12,7 +12,7 @@ CC = g++
 #GDB=-ggdb3
 #DEBUG=-DDEBUG
 ifndef DEBUG
-	OPT=-Ofast -pipe -march=native -mtune=native #-m64   
+	OPT=-Ofast -pipe -march=native -mtune=native #-m64
 endif
 
 # For some reasons, -static does not work on Mac OS X (MacPorts g++ 4.9) (FIXME)
@@ -26,7 +26,7 @@ WARNS=-Wextra -Wall -Wshadow -Wstrict-aliasing=1 -Werror -pedantic-errors
 
 CFLAGS=-ansi -std=c++11 -fabi-version=6 $(WARNS) $(OPT) $(STATIC) $(GDB) $(DEBUG) $(PROFILE)
 
-EXEC = gen 
+EXEC = gen
 
 .PHONY: all default clean mrproper
 
@@ -41,7 +41,6 @@ mrproper:
 	-/bin/rm -f $(OBJECTS) $(EXEC)
 
 clean:
-	-/bin/rm -f $(OBJECTS) 
+	-/bin/rm -f $(OBJECTS)
 
 $(OBJECTS): $(HFILES)
-
