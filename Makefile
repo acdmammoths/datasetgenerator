@@ -6,6 +6,12 @@ OBJECTS = gen.o main.o command.o util.o
 
 LIBS = -lm
 
+UNAME := $(shell uname)
+ifeq ($(UNAME), FreeBSD)
+	# Fix to use your own version of GCC
+	LINKER=-Wl,-rpath=/usr/local/lib/gcc11
+endif
+
 CC = g++
 
 #PROFILE=-pg
@@ -16,7 +22,6 @@ ifndef DEBUG
 endif
 
 # For some reasons, -static does not work on Mac OS X (MacPorts g++ 4.9) (FIXME)
-UNAME := $(shell uname)
 STATIC=-static
 ifeq ($(UNAME), Darwin)
 	STATIC=-static-libgcc -static-libstdc++
@@ -35,7 +40,7 @@ all: default
 default: $(EXEC)
 
 gen:	$(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) $(LIBS) -fwhole-program -o gen
+	$(CC) $(CFLAGS) $(OBJECTS) $(LINKER) $(LIBS) -fwhole-program -o gen
 
 mrproper:
 	-/bin/rm -f $(OBJECTS) $(EXEC)
