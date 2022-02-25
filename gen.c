@@ -887,7 +887,7 @@ bool CustSeq::add(String &pat, StringSet &lits)
 void CustSeq::write(ofstream &fp)
 {
   for (LINT i = 0; i < ntrans-1; i++)
-    if ( trans[i]->size() > 0 )
+    if ( trans[i] != NULL && trans[i]->size() > 0 )
       trans[i]->write(fp, cid);
 }
 
@@ -895,6 +895,6 @@ void CustSeq::write(ofstream &fp)
 void CustSeq::write_asc(ofstream &fp)
 {
   for (LINT i = 0; i < ntrans-1; i++)
-    if ( trans[i]->size() > 0 )
+    if ( trans[i] != NULL && trans[i]->size() > 0 )
       trans[i]->write_asc(fp, cid);
 }
