@@ -19,7 +19,7 @@ endif
 UNAME := $(shell uname)
 STATIC=-static
 ifeq ($(UNAME), Darwin)
-STATIC=-static-libgcc -static-libstdc++
+	STATIC=-static-libgcc -static-libstdc++
 endif
 
 WARNS=-Wextra -Wall -Wshadow -Wstrict-aliasing=1 -Werror -pedantic-errors
