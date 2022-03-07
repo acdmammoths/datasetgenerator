@@ -1,9 +1,9 @@
 Dataset Generator
 =================
 
-A porting to C++11 and modern g++ of the IBM transactional dataset generator.
+A porting to C++11 and modern g++ of the IBM Quest dataset generator.
 
-Copyright (c) 2014 Matteo Riondato <matteo@cs.brown.edu>
+Copyright (c) 2014-22 Matteo Riondato <rionda@acm.org>
 
 History
 -------
@@ -17,12 +17,12 @@ http://www.almaden.ibm.com/cs/quest/syndata.html (that page no longer exists).
 After a while (around 2002-2003), the IBM version could not be compiled with
 "modern" g++ compilers anymore. Paolo Palmerini (<paolo.palmerini@cnuce.cnr.it>)
 published a g++-compilable modified version of the generator on his
-[website](http://miles.cnuce.cnr.it/~palmeri/datam/DCI/datasets.php). Paolo's
-modifications can be found in the source code by looking for comments
-highlighted by "// g++". 
+[website](http://miles.cnuce.cnr.it/~palmeri/datam/DCI/datasets.php) (also no
+longer existed). Paolo's modifications can be found in the source code by
+looking for comments highlighted by "// g++".
 
 As of June 2014 Paolo's version does not compile on current g++ (e.g., g++-4.9).
-[Matteo Riondato](http://cs.brown.edu/~matteo) (<matteo@cs.brown.edu>) took up
+[Matteo Riondato](http://matteo.rionda.to) (<rionda@acm.org>) took up
 the task to port the code to C++11 and make it compile with the current g++.
 
 License
@@ -32,12 +32,12 @@ information and Matteo Riondato is not aware of the licensing of the original
 IBM code. If you have information about this, please let Matteo know by writing
 an email to <matteo@cs.brown.edu>. Assuming the code was in the public
 domain, Matteo is licensing this code under the Apache License, Version 2.0. See
-the [LICENSE](./LICENSE) file and the [NOTICE](./NOTICE) file. 
+the [LICENSE](./LICENSE) file and the [NOTICE](./NOTICE) file.
 
 Install
 -------
 Just run "make" and the code will be compiled. It uses whatever "g++" is on your
-system. You can specify your favourite version by modifying the Makefile. 
+system. You can specify your favourite version by modifying the Makefile.
 
 Running
 -------
